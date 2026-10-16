@@ -18,6 +18,7 @@ public static class ServerTickRegistry
         ms => BaseScript.Delay((int)ms),
         () => BaseScript.Delay(0),
         Write,
+        API.ProfilerIsRecording,
         API.ProfilerEnterScope,
         API.ProfilerExitScope,
         () => Script.IsMainThread,

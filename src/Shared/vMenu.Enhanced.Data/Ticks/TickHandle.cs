@@ -176,13 +176,9 @@ public sealed class TickHandle : IDisposable
             {
                 await _engine.MainThreadAsync();
 
-                // Opened outside the try and closed in the finally, so a handler that throws still leaves the
-                // profiler balanced. An unbalanced scope corrupts every reading after it, not just this tick's.
-                _engine.EnterScope(_scope);
-
                 try
                 {
-                    await _handler();
+                    await _engine.InvokeHandler(_scope, _handler);
 
                     _failures = 0;
                 }
@@ -204,11 +200,6 @@ public sealed class TickHandle : IDisposable
                         break;
                     }
                 }
-                finally
-                {
-                    _engine.ExitScope();
-                }
-
                 await _engine.DelayAsync(WaitMilliseconds());
             }
         }

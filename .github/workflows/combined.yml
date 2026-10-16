@@ -169,6 +169,9 @@ jobs:
       - name: Restore
         run: dotnet restore vMenu.Enhanced.slnx
 
+      - name: Check tick profiler boundaries
+        run: dotnet run --project tools/TickChecks -c Release
+
       - name: Build
         shell: bash
         run: |

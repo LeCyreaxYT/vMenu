@@ -17,6 +17,7 @@ public sealed class TickEngine(
     Func<long, Task> delay,
     Func<Task> yield,
     Action<TickLog, string> write,
+    Func<bool> isProfilerRecording,
     Action<string> enterScope,
     Action exitScope,
     Func<bool> isMainThread,
@@ -109,11 +110,26 @@ public sealed class TickEngine(
 
     internal void Log(TickLog level, string message) => write(level, message);
 
-    // Injected like the rest, because the profiler natives live in each side's own binding and this
-    // assembly deliberately references neither.
-    internal void EnterScope(string scope) => enterScope(scope);
+    // Scope only the initial synchronous execution. A Task may suspend or continue on another
+    // thread; keeping the native scope open across that wait attributes unrelated work to this tick.
+    internal Task InvokeHandler(string scope, Func<Task> handler)
+    {
+        if (!isProfilerRecording())
+        {
+            return handler();
+        }
 
-    internal void ExitScope() => exitScope();
+        enterScope(scope);
+
+        try
+        {
+            return handler();
+        }
+        finally
+        {
+            exitScope();
+        }
+    }
 
     internal void Unregister(TickHandle handle)
     {

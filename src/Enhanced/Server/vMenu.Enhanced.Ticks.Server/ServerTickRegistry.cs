@@ -16,6 +16,7 @@ public static class ServerTickRegistry
         ms => API.Delay(ms),
         () => API.Delay(0),
         Write,
+        Native.ProfilerIsRecording,
         Native.ProfilerEnterScope,
         Native.ProfilerExitScope,
         IsMainThread,

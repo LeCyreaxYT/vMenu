@@ -16,6 +16,7 @@ public static class TickRegistry
         ms => API.Delay(ms),
         () => API.Yield(),
         Write,
+        Native.ProfilerIsRecording,
         Native.ProfilerEnterScope,
         Native.ProfilerExitScope,
         IsMainThread,
