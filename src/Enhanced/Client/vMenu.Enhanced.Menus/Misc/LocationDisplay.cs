@@ -3,6 +3,7 @@ using System.Numerics;
 
 using CitizenFX.FiveM.Client;
 
+using vMenu.Enhanced.Configuration;
 using vMenu.Enhanced.Data.Ticks;
 using vMenu.Enhanced.MenuFramework;
 using vMenu.Enhanced.Localization;
@@ -12,6 +13,7 @@ using vMenu.Enhanced.Serialization;
 using vMenu.Enhanced.Storage;
 using vMenu.Enhanced.Ticks;
 
+using AppearanceSettings = vMenu.Enhanced.Data.Configuration.Settings.MenuAppearance;
 using DisplaySettingsPermissions = vMenu.Enhanced.Data.Permissions.Menus.DisplaySettings;
 
 namespace vMenu.Enhanced.Menus.Misc;
@@ -47,7 +49,9 @@ public static class LocationDisplay
     private static string _paintedAnchor = string.Empty;
 
     public static bool ShowLocation =>
-        UserDefaults.DisplayShowLocation.Value && ClientPermissions.IsAllowed(DisplaySettingsPermissions.ShowLocation);
+        ClientConfig.Value(AppearanceSettings.HudInfoEnabled)
+        && UserDefaults.DisplayShowLocation.Value
+        && ClientPermissions.IsAllowed(DisplaySettingsPermissions.ShowLocation);
 
     public static bool ShowCoordinates =>
         UserDefaults.DisplayShowCoordinates.Value && ClientPermissions.IsAllowed(DisplaySettingsPermissions.ShowCoordinates);
@@ -79,6 +83,7 @@ public static class LocationDisplay
             autoStart: false);
 
         ClientPermissions.PermissionsChanged += Reevaluate;
+        ClientConfig.AddEventListenerFor([AppearanceSettings.HudInfoEnabled], Reevaluate);
     }
 
     public static void Restore() => Reevaluate();

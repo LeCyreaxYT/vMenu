@@ -18,6 +18,12 @@ public static class KeyBindings
         Default = "F2",
     };
 
+    public static readonly BoolSetting NoClipToggleEnabled = new("vMenu.Enhanced.KeyBindings.NoClipToggleEnabled")
+    {
+        Description = "Allows toggling noclip with a hotkey. Disable to use only the menu, including for players with an existing binding. Restart the resource after changing this.",
+        Default = true,
+    };
+
     public static readonly StringSetting TeleportKey = new("vMenu.Enhanced.KeyBindings.TeleportKey")
     {
         Description =

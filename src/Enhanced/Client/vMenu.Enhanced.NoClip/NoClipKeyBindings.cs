@@ -75,7 +75,16 @@ internal static class NoClipKeyBindings
             toggleKey = "F2";
         }
 
-        RegisterPress(Toggle, "vMenu NoClip: Toggle on/off", toggleKey, onToggle);
+        if (ClientConfig.Value(KeyBindings.NoClipToggleEnabled))
+        {
+            RegisterPress(Toggle, "vMenu NoClip: Toggle on/off", toggleKey, () =>
+            {
+                if (ClientConfig.Value(KeyBindings.NoClipToggleEnabled))
+                {
+                    onToggle();
+                }
+            });
+        }
         RegisterPress(SpeedUp, "vMenu NoClip: Increase speed", "LSHIFT", WhileActive(onSpeedUp));
         RegisterPress(SpeedDown, "vMenu NoClip: Decrease speed", "LCONTROL", WhileActive(onSpeedDown));
         RegisterPress(FollowCam, "vMenu NoClip: Toggle follow cam", "H", WhileActive(onFollowCam));

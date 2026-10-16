@@ -4,6 +4,8 @@ using vMenu.Enhanced.Menus.Misc;
 using vMenu.Enhanced.Menus.World;
 using vMenu.Enhanced.Storage;
 
+using AppearanceSettings = vMenu.Enhanced.Data.Configuration.Settings.MenuAppearance;
+
 using DisplaySettingsPermissions = vMenu.Enhanced.Data.Permissions.Menus.DisplaySettings;
 
 namespace vMenu.Enhanced.Menus;
@@ -92,7 +94,7 @@ public sealed class DisplaySettingsMenu : MenuDefinition
         {
             Text = MenuText.Key(Loc.DisplaySettings.LocationDisplay),
             Description = MenuText.Key(Loc.DisplaySettings.LocationDisplayDescription),
-            Gate = DisplaySettingsPermissions.ShowLocation,
+            Gate = MenuGate.Setting(AppearanceSettings.HudInfoEnabled) & DisplaySettingsPermissions.ShowLocation,
             ReadState = () => UserDefaults.DisplayShowLocation.Value,
             OnChanged = changed => LocationDisplay.SetShowLocation(changed.Checked),
         });
@@ -155,6 +157,7 @@ public sealed class DisplaySettingsMenu : MenuDefinition
         {
             Text = MenuText.Key(Loc.DisplaySettings.ShowTime),
             Description = MenuText.Key(Loc.DisplaySettings.ShowTimeDescription),
+            Gate = MenuGate.Setting(AppearanceSettings.HudInfoEnabled),
             ReadState = () => UserDefaults.DisplayShowTime.Value,
             OnChanged = changed => WeatherForecast.SetClockEnabled(changed.Checked),
         });

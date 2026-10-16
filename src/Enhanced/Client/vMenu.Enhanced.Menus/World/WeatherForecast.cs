@@ -12,6 +12,8 @@ using vMenu.Enhanced.Serialization;
 using vMenu.Enhanced.Storage;
 using vMenu.Enhanced.Ticks;
 
+using AppearanceSettings = vMenu.Enhanced.Data.Configuration.Settings.MenuAppearance;
+
 using DisplaySettingsPermissions = vMenu.Enhanced.Data.Permissions.Menus.DisplaySettings;
 using WeatherOptionsSettings = vMenu.Enhanced.Data.Configuration.Settings.WeatherOptions;
 
@@ -44,15 +46,18 @@ public static class WeatherForecast
     private static string _painted = string.Empty;
 
     public static MenuGate Allowed { get; } =
-        MenuGate.Setting(WeatherOptionsSettings.Enabled)
+        MenuGate.Setting(AppearanceSettings.HudInfoEnabled)
+        & MenuGate.Setting(WeatherOptionsSettings.Enabled)
         & MenuGate.Permission(DisplaySettingsPermissions.Forecast);
 
     public static bool Enabled =>
-        UserDefaults.DisplayWeatherForecast.Value
+        ClientConfig.Value(AppearanceSettings.HudInfoEnabled)
+        && UserDefaults.DisplayWeatherForecast.Value
         && ClientConfig.Value(WeatherOptionsSettings.Enabled)
         && ClientPermissions.IsAllowed(DisplaySettingsPermissions.Forecast);
 
-    public static bool ClockEnabled => UserDefaults.DisplayShowTime.Value;
+    public static bool ClockEnabled =>
+        ClientConfig.Value(AppearanceSettings.HudInfoEnabled) && UserDefaults.DisplayShowTime.Value;
 
     public static bool ClockOnlyShown => ClockEnabled && !Enabled;
 
@@ -71,7 +76,7 @@ public static class WeatherForecast
 
         ClientPermissions.PermissionsChanged += Reevaluate;
 
-        ClientConfig.AddEventListenerFor([WeatherOptionsSettings.Enabled], Reevaluate);
+        ClientConfig.AddEventListenerFor([WeatherOptionsSettings.Enabled, AppearanceSettings.HudInfoEnabled], Reevaluate);
     }
 
     public static void Restore() => Reevaluate();

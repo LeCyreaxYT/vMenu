@@ -30,11 +30,14 @@ public static class ConfigCatalog
         [
             KeyBindings.MenuToggleKey,
             KeyBindings.NoClipToggleKey,
+            KeyBindings.NoClipToggleEnabled,
             KeyBindings.TeleportKey,
         ]),
         new("Menu Appearance",
         [
             MenuAppearance.Skin,
+            MenuAppearance.Scale,
+            MenuAppearance.HudInfoEnabled,
             MenuAppearance.TitleAlignment,
             MenuAppearance.HeaderGlare,
         ]),

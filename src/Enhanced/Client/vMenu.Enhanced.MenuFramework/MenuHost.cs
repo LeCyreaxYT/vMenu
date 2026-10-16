@@ -976,6 +976,8 @@ internal sealed class MenuHost : IDisposable
 
     private async void HandleMenuOpen(Menu menu)
     {
+        HeaderStyle.Apply();
+
         ClearConfirmation();
 
         // The bound item table is static and rebindable, and any code can call OpenMenu directly, so the menu

@@ -1,0 +1,14 @@
+#menuapi {
+    --vmenu-menu-scale: 1;
+    --vmenu-alignment-offset: 0px;
+    transform: translateX(var(--vmenu-alignment-offset)) scale(calc(var(--menuapi-scale) * var(--vmenu-menu-scale)));
+}
+
+/* MenuAPI uses a 500px menu at 1080p. Keep the same right edge as its original placement. */
+#menuapi[data-align="right"] {
+    --vmenu-alignment-offset: calc(500px * var(--menuapi-scale) * (1 - var(--vmenu-menu-scale)));
+}
+
+#menuapi[data-text-weight="supersampled"] {
+    transform: translateX(calc(var(--vmenu-alignment-offset) / 2)) scale(calc(var(--menuapi-scale) * var(--vmenu-menu-scale) / 2));
+}

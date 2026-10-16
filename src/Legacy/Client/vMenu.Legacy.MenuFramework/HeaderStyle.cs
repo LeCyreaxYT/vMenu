@@ -1,7 +1,10 @@
+using CitizenFX.Core.Native;
+
 using MenuAPI;
 
 using vMenu.Enhanced.Configuration;
 using vMenu.Enhanced.Logging;
+using vMenu.Enhanced.Serialization;
 
 using AppearanceSettings = vMenu.Enhanced.Data.Configuration.Settings.MenuAppearance;
 
@@ -11,6 +14,8 @@ public static class HeaderStyle
 {
     private static string? _reportedAlignment;
 
+    private static string? _reportedScale;
+
     /// <summary>Call after ClientConfig.Initialize, before the menus are built.</summary>
     public static void Initialize()
     {
@@ -18,17 +23,34 @@ public static class HeaderStyle
             [
                 AppearanceSettings.TitleAlignment,
                 AppearanceSettings.HeaderGlare,
+                AppearanceSettings.Scale,
             ],
             Apply);
 
         Apply();
     }
 
-    private static void Apply()
+    internal static void Apply()
     {
         MenuController.DefaultTitleAlignment = Alignment();
         MenuController.DefaultTitleFont = MenuFont.ChaletComprimeCologne;
         MenuController.DefaultShowHeaderGlare = ClientConfig.Value(AppearanceSettings.HeaderGlare);
+
+        var scale = ClientConfig.Value(AppearanceSettings.Scale);
+        if (float.IsNaN(scale) || scale < 0.5f || scale > 1.25f)
+        {
+            Report(ref _reportedScale, scale.ToString(), $"{AppearanceSettings.Scale.Name} must be between 0.5 and 1.25. Using 1.0.");
+            scale = 1f;
+        }
+
+        API.SendNuiMessage(ClientJson.Serialize(new AppearanceMessage { Scale = scale }));
+    }
+
+    private sealed class AppearanceMessage
+    {
+        public string Type { get; } = "menu_appearance";
+
+        public float Scale { get; set; }
     }
 
     private static Menu.TitleAlignmentOption Alignment()
