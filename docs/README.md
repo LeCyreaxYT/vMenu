@@ -18,9 +18,9 @@ Requires Node 20.19+ or 22.12+.
 
 ```sh
 cd docs
-npm install
-npm run dev      # local preview
-npm run build    # production build into ./dist
+pnpm install --frozen-lockfile
+pnpm run dev      # local preview
+pnpm run build    # production build into ./dist
 ```
 
 ## How it deploys

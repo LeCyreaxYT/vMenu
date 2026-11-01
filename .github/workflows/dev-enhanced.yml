@@ -114,6 +114,11 @@ jobs:
           name: enhanced-packages
           path: packages/*.nupkg
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.16.1
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -130,10 +135,10 @@ jobs:
 
           (
             cd src/Shared/vMenu.Enhanced.JsAPI
-            npm ci --no-audit --no-fund
+            pnpm install --frozen-lockfile
             npm version "$NPM_VERSION" --no-git-tag-version --allow-same-version
-            npm run check
-            npm run build
+            pnpm run check
+            pnpm run build
             npm pack --pack-destination ../../../npm-package
           )
 

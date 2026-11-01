@@ -1,0 +1,5 @@
+packages:
+  - '.'
+
+overrides: {"@expressive-code/core>postcss-nested": "^8.0.1"}
+allowBuilds: {"esbuild": true}
